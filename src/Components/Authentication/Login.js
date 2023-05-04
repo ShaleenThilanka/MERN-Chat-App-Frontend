@@ -4,25 +4,76 @@ import {FormControl, FormLabel} from "@chakra-ui/form-control";
 import {Input, InputGroup, InputRightElement} from "@chakra-ui/input";
 import {Button} from "@chakra-ui/button";
 import {useToast} from "@chakra-ui/toast";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const Login = () => {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [picLoading, setPicLoading] = useState(false);
+    const navigate  = useNavigate();
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
     const toast = useToast();
+    const [loading, setLoading] = useState(false);
     const submitHandler = async () => {
-    }
-    const postDetails = async () => {
-    }
+        setLoading(true);
+        if (!email || !password) {
+            toast({
+                title: "Please Fill all the Fields",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
+            return;
+        }
+
+        // console.log(email, password);
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                },
+            };
+
+            const { data } = await axios.post(
+                "/api/user/login",
+                { email, password },
+                config
+            );
+
+            // console.log(JSON.stringify(data));
+            toast({
+                title: "Login Successful",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            setLoading(false);
+            navigate("/chats");
+        } catch (error) {
+            toast({
+                title: "Error Occurred!",
+                description: error.response.data.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
+        }
+    };
     return (
         <VStack spacing="5px">
 
             <FormControl id="email" isRequired>
                 <FormLabel>Email Address</FormLabel>
                 <Input
+                    value={email}
                     type="email"
                     placeholder="Enter Your Email Address"
                     onChange={(e) => setEmail(e.target.value)}
@@ -32,6 +83,7 @@ const Login = () => {
                 <FormLabel>Password</FormLabel>
                 <InputGroup size="md">
                     <Input
+                        value={password}
                         type={show ? "text" : "password"}
                         placeholder="Enter Password"
                         onChange={(e) => setPassword(e.target.value)}
@@ -49,7 +101,7 @@ const Login = () => {
                 width="100%"
                 style={{marginTop: 15}}
                 onClick={submitHandler}
-                isLoading={picLoading}
+                isLoading={loading}
             >
                 Login
             </Button>
@@ -64,7 +116,7 @@ const Login = () => {
                         setPassword("12345678");
                     }
                 }}
-                isLoading={picLoading}
+                isLoading={loading}
             >
                 Gust User
             </Button>

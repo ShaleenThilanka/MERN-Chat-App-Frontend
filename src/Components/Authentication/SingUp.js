@@ -5,14 +5,14 @@ import { VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 
 const SingUp = () => {
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
     const toast = useToast();
-
-
+    const navigate  = useNavigate();
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
@@ -20,7 +20,69 @@ const SingUp = () => {
     const [pics, setPics] = useState();
     const [picLoading, setPicLoading] = useState(false);
 
-    const submitHandler = async () => {}
+    const submitHandler = async () => {
+        setPicLoading(true);
+        if (!name || !email || !password || !confirmPassword) {
+            toast({
+                title: "Please Fill all the Fields",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setPicLoading(false);
+            return;
+        }
+        if (password !== confirmPassword) {
+            toast({
+                title: "Passwords Do Not Match",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            return;
+        }
+        console.log(name, email, password, pics);
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                },
+            };
+            const { data } = await axios.post(
+                "/api/user",
+                {
+                    name,
+                    email,
+                    password,
+                    pics,
+                },
+                config
+            );
+            console.log(data);
+            toast({
+                title: "Registration Successful",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            setPicLoading(false);
+            navigate("/chats");
+        } catch (error) {
+            toast({
+                title: "Error Occurred!",
+                description: error.response.data.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setPicLoading(false);
+        }
+    };
     const postDetails = async (pics) => {
         setPicLoading(true);
         if (pics === undefined) {
