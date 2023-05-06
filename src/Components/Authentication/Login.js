@@ -16,6 +16,7 @@ const Login = () => {
     const handleClick = () => setShow(!show);
     const toast = useToast();
     const [loading, setLoading] = useState(false);
+
     const submitHandler = async () => {
         setLoading(true);
         if (!email || !password) {
@@ -30,7 +31,6 @@ const Login = () => {
             return;
         }
 
-        // console.log(email, password);
         try {
             const config = {
                 headers: {
@@ -44,7 +44,6 @@ const Login = () => {
                 config
             );
 
-            // console.log(JSON.stringify(data));
             toast({
                 title: "Login Successful",
                 status: "success",
@@ -69,7 +68,6 @@ const Login = () => {
     };
     return (
         <VStack spacing="5px">
-
             <FormControl id="email" isRequired>
                 <FormLabel>Email Address</FormLabel>
                 <Input
@@ -116,7 +114,6 @@ const Login = () => {
                         setPassword("12345678");
                     }
                 }}
-                isLoading={loading}
             >
                 Gust User
             </Button>
