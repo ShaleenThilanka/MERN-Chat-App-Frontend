@@ -6,7 +6,19 @@ import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 
 import { ChatState } from "../../Context/ChatProvider";
-import {Avatar, Box, Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tooltip} from "@chakra-ui/react";
+import {
+    Avatar,
+    Box,
+    Button,
+    Menu,
+    MenuButton,
+    MenuDivider,
+    MenuItem,
+    MenuList,
+    Spinner,
+    Text,
+    Tooltip
+} from "@chakra-ui/react";
 import * as PropTypes from "prop-types";
 import Profile from "./Profile";
 import {BellIcon, ChevronDownIcon} from "@chakra-ui/icons";
@@ -208,7 +220,7 @@ function SideDrawer() {
                                 />
                             ))
                         )}
-                        {/*{loadingChat && <Spinner ml="auto" d="flex" />}*/}
+                        {loadingChat && <Spinner ml="auto" d="flex" />}
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
