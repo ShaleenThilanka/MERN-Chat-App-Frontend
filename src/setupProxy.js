@@ -4,7 +4,7 @@ module.exports = function(app) {
     app.use(
         '/api',
         createProxyMiddleware({
-            target: 'https://mern-chat-app-server-api.onrender.com/',
+            target: 'https://mern-chat-app-server-api.onrender.com',
             changeOrigin: true,
         })
     );
