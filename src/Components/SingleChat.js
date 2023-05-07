@@ -13,7 +13,7 @@ import animations from '../animations/typing.json'
 import io from "socket.io-client";
 import UpdateGroupChatModal from "../Components/SubComponent/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://mern-chat-app-server-api.onrender.com/";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
